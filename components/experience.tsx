@@ -1,5 +1,5 @@
 "use client";
-import LetterGlitch from "@/components/ui/letter-glitch";
+// import LetterGlitch from "@/components/ui/letter-glitch";
 import H2 from "@/components/typography/h2";
 import ExperienceCard from "@/components/experience/experience-card";
 import {Badge} from "@/components/ui/badge";
@@ -16,15 +16,15 @@ export default function Experience() {
     return (
         <section id="experience">
             <div className="relative contain-content overflow-hidden">
-                <LetterGlitch
-                    className="absolute inset-0 z-0"
-                    parentRef={containerRef}
-                    glitchSpeed={20}
-                    centerVignette={true}
-                    outerVignette={true}
-                    smooth={true}
-                    glitchColors={['#2b4539', '#61dca3', '#61b3dc']}
-                />
+                {/*<LetterGlitch*/}
+                {/*    className="absolute inset-0 z-0"*/}
+                {/*    parentRef={containerRef}*/}
+                {/*    glitchSpeed={20}*/}
+                {/*    centerVignette={true}*/}
+                {/*    outerVignette={true}*/}
+                {/*    smooth={true}*/}
+                {/*    glitchColors={['#2b4539', '#61dca3', '#61b3dc']}*/}
+                {/*/>*/}
                 <div className="relative z-10 py-8 px-4 sm:p-16">
                     <H2>Experience</H2>
                     <ExperienceCard

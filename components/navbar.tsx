@@ -20,8 +20,12 @@ export interface ProjectProps {
     href: string;
 }
 const projects: ProjectProps[] = [
-
-]
+    {
+        title: "Shell-GPT",
+        description: "An electron-based 'shell' that wraps GPT, and executes its commands in a Docker container.",
+        href: "/projects/shell-gpt"
+    }
+];
 
 export default function Navbar() {
     const [open, setOpen] = useState(false);
@@ -29,40 +33,46 @@ export default function Navbar() {
 
     useEffect(() => {
         function clickOutsideHandle(event: MouseEvent) {
-            if (
-                open && // Only close if open
-                menuRef.current &&
-                !menuRef.current.contains(event.target as Node)
-            ) {
+            if (open && menuRef.current && !menuRef.current.contains(event.target as Node)) {
                 setOpen(false);
             }
         }
-
         window.addEventListener("click", clickOutsideHandle);
-
-        return () => {
-            window.removeEventListener("click", clickOutsideHandle);
-        };
+        return () => window.removeEventListener("click", clickOutsideHandle);
     }, [open]);
 
     return (
         <div
             ref={menuRef}
+            className="sticky top-0 z-50"
         >
-            <NavigationMenu viewport={true} orientation="horizontal" className={cn(
-                "sm:flex-row flex-col-reverse sm:justify-between max-w-none sm:items-center items-start"
-            )}>
-                <NavigationMenuList className={cn("items-start sm:items-center sm:flex-row",
-                    (!open ? "hidden sm:flex" : "")
-                )}>
+            <NavigationMenu
+                viewport={true}
+                orientation="horizontal"
+                className={cn(
+                    "sm:flex-row flex-col-reverse sm:justify-between max-w-none sm:items-center items-start",
+                    "bg-black/40 backdrop-blur-lg shadow-lg rounded-xl p-3 transition-all duration-300"
+                )}
+            >
+                <NavigationMenuList
+                    className={cn(
+                        "items-start sm:items-center sm:flex-row",
+                        !open ? "hidden sm:flex" : ""
+                    )}
+                >
                     <NavigationMenuItem>
-                        <NavigationMenuTrigger id="home">Home</NavigationMenuTrigger>
-                        <NavigationMenuContent popoverTarget={"#home"}>
+                        <NavigationMenuTrigger
+                            id="home"
+                            className="transition-transform hover:scale-105 hover:text-white"
+                        >
+                            Home
+                        </NavigationMenuTrigger>
+                        <NavigationMenuContent popoverTarget="#home">
                             <ul className="grid gap-2 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
                                 <li className="row-span-3">
                                     <NavigationMenuLink asChild>
                                         <Link
-                                            className="from-muted/50 to-muted flex h-full w-full flex-col justify-end rounded-md bg-linear-to-b p-6 no-underline outline-hidden select-none focus:shadow-md"
+                                            className="from-muted/50 to-muted flex h-full w-full flex-col justify-end rounded-md bg-linear-to-b p-6 no-underline outline-hidden select-none focus:shadow-md hover:shadow-lg hover:scale-[1.02] transition-all duration-200"
                                             href="/"
                                         >
                                             <div className="mt-4 mb-2 text-lg font-medium">
@@ -87,11 +97,14 @@ export default function Navbar() {
                         </NavigationMenuContent>
                     </NavigationMenuItem>
                     <NavigationMenuItem>
-                        <NavigationMenuTrigger>Projects</NavigationMenuTrigger>
+                        <NavigationMenuTrigger className="transition-transform hover:scale-105 hover:text-white">
+                            Projects
+                        </NavigationMenuTrigger>
                         <NavigationMenuContent>
                             <ul className="grid w-[200px] gap-2 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                                 {projects.map((project) => (
                                     <ListItem
+                                        className="w-full"
                                         key={project.title}
                                         title={project.title}
                                         href={project.href}
@@ -103,39 +116,49 @@ export default function Navbar() {
                         </NavigationMenuContent>
                     </NavigationMenuItem>
                     <NavigationMenuItem>
-                        <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                        <NavigationMenuLink
+                            asChild
+                            className={cn(navigationMenuTriggerStyle(), "hover:scale-105 hover:text-white transition-transform")}
+                        >
                             <Link href="/the-watering-can">The Watering Can</Link>
                         </NavigationMenuLink>
                     </NavigationMenuItem>
                 </NavigationMenuList>
+
                 <div className="flex flex-row justify-between w-full">
                     <Button
-                        className="sm:hidden"
+                        className="sm:hidden hover:scale-105 transition-transform"
                         variant="ghost"
                         onClick={() => setOpen(!open)}
                     >
-                        <Menu/>
+                        <Menu />
                     </Button>
-                    <NavigationMenuList className="sm:flex-row justify-self-end">
-                    <NavigationMenuItem>
-                        <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-                            <Link target="_blank" href="https://github.com/joshtwc">
-                                <Github/>
-                            </Link>
-                        </NavigationMenuLink>
-                    </NavigationMenuItem>
-                    <NavigationMenuItem>
-                        <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-                            <Link target="_blank" href="https://www.linkedin.com/in/joshua-wood-a072a2228/">
-                                <Linkedin/>
-                            </Link>
-                        </NavigationMenuLink>
-                    </NavigationMenuItem>
-                </NavigationMenuList>
+                    <NavigationMenuList className="sm:flex-row justify-self-end gap-2">
+                        <NavigationMenuItem>
+                            <NavigationMenuLink
+                                asChild
+                                className="hover:scale-110 transition-transform hover:text-white"
+                            >
+                                <Link target="_blank" href="https://github.com/joshtwc">
+                                    <Github />
+                                </Link>
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem>
+                            <NavigationMenuLink
+                                asChild
+                                className="hover:scale-110 transition-transform hover:text-white"
+                            >
+                                <Link target="_blank" href="https://www.linkedin.com/in/joshua-wood-a072a2228/">
+                                    <Linkedin />
+                                </Link>
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                    </NavigationMenuList>
                 </div>
             </NavigationMenu>
         </div>
-    )
+    );
 }
 
 function ListItem({
@@ -147,13 +170,16 @@ function ListItem({
     return (
         <li {...props}>
             <NavigationMenuLink asChild>
-                <Link href={href}>
-                    <div className="text-sm leading-none font-medium">{title}</div>
+                <Link
+                    href={href}
+                    className="block rounded-lg p-3 transition-all duration-200 hover:bg-white/10 hover:shadow-md hover:scale-[1.02]"
+                >
+                    <div className="text-sm leading-none font-medium text-white">{title}</div>
                     <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
                         {children}
                     </p>
                 </Link>
             </NavigationMenuLink>
         </li>
-    )
+    );
 }

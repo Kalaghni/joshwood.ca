@@ -7,18 +7,18 @@ import { LazyMount } from "@/components/ui/lazy-mount";
 export default function Home() {
     return (
         <section id="home" className="max-w-lvw w-full">
-            <LazyMount rootMargin="0px 0px">
+            {/*<LazyMount rootMargin="0px 0px">*/}
                 <Hero />
-            </LazyMount>
-            <LazyMount>
-                <Introduction />
-            </LazyMount>
-            <LazyMount>
-                <Experience />
-            </LazyMount>
-            <LazyMount>
+            {/*</LazyMount>*/}
+            {/*<LazyMount>*/}
                 <Technologies />
-            </LazyMount>
+            {/*</LazyMount>*/}
+            {/*<LazyMount>*/}
+                <Introduction />
+            {/*</LazyMount>*/}
+            {/*<LazyMount>*/}
+                <Experience />
+            {/*</LazyMount>*/}
         </section>
     );
 }

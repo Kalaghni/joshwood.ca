@@ -7,6 +7,8 @@ import Navbar from "@/components/navbar";
 import P from "@/components/typography/p";
 import {Separator} from "@/components/ui/separator";
 import ReturnToTopButton from "@/components/ui/return-to-top";
+import BuilderBar from "@/components/ui/builder-bar";
+import TechBackground from "@/components/background";
 
 const dmSans = DM_Sans({
     variable: "--font-dm-sans",
@@ -49,6 +51,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
         >
+            <TechBackground />
             <Navbar/>
             <ReturnToTopButton/>
             {children}

@@ -5,7 +5,7 @@ import P from "@/components/typography/p";
 import {Card, CardContent, CardDescription, CardHeader} from "@/components/ui/card";
 import H4 from "@/components/typography/h4";
 import {useRef} from "react";
-import Balatro from "@/components/ui/balatro";
+// import Balatro from "@/components/ui/balatro";
 
 export default function Introduction() {
 
@@ -15,14 +15,14 @@ export default function Introduction() {
         <section id="introduction" className="contain-content rounded-t-2xl">
             <div>
                 <div ref={containerRef} className="relative contain-content overflow-hidden">
-                    <Balatro
-                        className="absolute inset-0 z-0"
-                        isRotate={false}
-                        mouseInteraction={true}
-                        pixelFilter={1920}
-                        parentRef={containerRef}
-                        color1={"#2b4539"}
-                    />
+                    {/*<Balatro*/}
+                    {/*    className="absolute inset-0 z-0"*/}
+                    {/*    isRotate={false}*/}
+                    {/*    mouseInteraction={true}*/}
+                    {/*    pixelFilter={1920}*/}
+                    {/*    parentRef={containerRef}*/}
+                    {/*    color1={"#2b4539"}*/}
+                    {/*/>*/}
                     <div className="relative z-10 py-8 px-4 sm:p-16">
                         <H2>Introduction</H2>
                         <Card className="mt-8">
