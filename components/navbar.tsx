@@ -24,9 +24,13 @@ const projects: ProjectProps[] = [
         title: "Shell-GPT",
         description: "An electron-based 'shell' that wraps GPT, and executes its commands in a Docker container.",
         href: "/projects/shell-gpt"
+    },
+    {
+        title: "Sirocco",
+        description: "The Synesthetic Terminal",
+        href: "/projects/sirocco"
     }
 ];
-import {SidebarTrigger} from "@/components/ui/sidebar";
 // import MainMenu from "@/components/main-menu";
 
 export default function Navbar() {

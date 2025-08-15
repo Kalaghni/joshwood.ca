@@ -29,8 +29,8 @@ export default function ShellGptProjectPage() {
                 ]}
                 tech={["TypeScript", "Node.js", "OpenAI", "Tailwind CSS", "Electron", "Vité"]}
                 actions={[
-                    { type: "github", href: "https://github.com/<you>/shell-gpt", label: "Repository" },
-                    { type: "link", href: "https://github.com/<you>/shell-gpt#readme", label: "Docs" },
+                    { type: "github", href: "https://github.com/Kalaghni/shell-gpt", label: "Repository" },
+                    { type: "link", href: "https://github.com/Kalaghni/shell-gpt#readme", label: "Docs" },
                 ]}
             >
                 <h3>Install</h3>

@@ -12,6 +12,7 @@ import {Button} from "@/components/ui/button";
 import {SidebarClose} from "lucide-react";
 import {useEffect} from "react";
 import Footer from "@/app/footer";
+import AppFooter from "@/components/app-footer";
 
 export function AppSidebar({className}: {className?: string}) {
 
@@ -50,7 +51,7 @@ export function AppSidebar({className}: {className?: string}) {
                 <SidebarGroup />
             </SidebarContent>
             <SidebarFooter>
-                <Footer/>
+                <AppFooter/>
             </SidebarFooter>
         </Sidebar>
     )

@@ -4,7 +4,7 @@ import {AppSidebar} from "@/components/app-sidebar";
 import {SidebarProvider} from "@/components/ui/sidebar";
 import {useIsMobile} from "@/hooks/use-mobile";
 import Navbar from "@/components/navbar";
-import Footer from "@/app/footer";
+import AppFooter from "@/components/app-footer";
 
 export default function Main({ children }: {children?: ReactNode}) {
 
@@ -23,7 +23,7 @@ export default function Main({ children }: {children?: ReactNode}) {
                     {children}
                 </main>
             </SidebarProvider>
-            <Footer/>
+            <AppFooter/>
         </div>
     )
 }
