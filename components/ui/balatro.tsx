@@ -150,8 +150,10 @@ export default function Balatro({
         const setSize = () => {
             const parent = parentRef.current!;
             const container = containerRef.current!;
-            container.style.width = `${parent.offsetWidth}px`;
-            container.style.height = `${parent.offsetHeight}px`;
+            if (parent && container) {
+                container.style.width = `${parent.offsetWidth}px`;
+                container.style.height = `${parent.offsetHeight}px`;
+            }
         };
 
         setSize();

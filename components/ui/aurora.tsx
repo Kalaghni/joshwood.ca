@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { useEffect, useRef } from "react";
+import {RefObject, useEffect, useRef} from "react";
 import { Renderer, Program, Mesh, Color, Triangle } from "ogl";
 import {cn} from "@/lib/utils";
 
@@ -116,9 +116,10 @@ interface AuroraProps {
     time?: number;
     speed?: number;
     className?: string;
+    parentRef?: RefObject<HTMLDivElement|null>;
 }
 
-export default function Aurora({className, ...props}: AuroraProps) {
+export default function Aurora({className, parentRef, ...props}: AuroraProps) {
     const {
         colorStops = ["#5227FF", "#7cff67", "#5227FF"],
         amplitude = 1.0,
@@ -128,6 +129,24 @@ export default function Aurora({className, ...props}: AuroraProps) {
     propsRef.current = props;
 
     const ctnDom = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (!parentRef?.current || !ctnDom.current) return;
+
+        const setSize = () => {
+            const parent = parentRef.current!;
+            const self = ctnDom.current!;
+            self.style.width = `${parent.offsetWidth}px`;
+            self.style.height = `${parent.offsetHeight}px`;
+        };
+
+        setSize();
+
+        const ro = new window.ResizeObserver(setSize);
+        ro.observe(parentRef.current);
+
+        return () => ro.disconnect();
+    }, [parentRef]);
 
     useEffect(() => {
         const ctn = ctnDom.current;
@@ -144,7 +163,6 @@ export default function Aurora({className, ...props}: AuroraProps) {
         gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
         gl.canvas.style.backgroundColor = "transparent";
 
-        // eslint-disable-next-line prefer-const
         let program: Program | undefined;
 
         function resize() {

@@ -1,18 +1,19 @@
 "use client";
 
 import * as React from "react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Tooltip, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import {
-    Code2, Atom, Braces, Hash, Binary, Cpu, Terminal, Workflow, Globe2, Layers, Wind,
+    Code2, Atom, Braces, Hash, Binary, Cpu, Terminal, Globe2, Layers, Wind,
     Server, Database, Boxes, Shield, Feather, Package, Network, Cable,
     ShoppingCart, CreditCard, CalendarClock, Route, PhoneCall, Smartphone, Nfc,
 } from "lucide-react";
+import H2 from "@/components/typography/h2";
 
 type Group = "Frontend" | "Backend" | "Data" | "DevOps" | "Integrations" | "Other";
 
@@ -115,7 +116,7 @@ export default function Technologies({
                     <CardHeader className="pb-2">
                         <CardTitle className="flex items-center gap-2">
                             <Code2 className="h-5 w-5" />
-                            {title}
+                            <H2>{title}</H2>
                             <Badge className="ml-1 rounded-full" variant="secondary">Stack</Badge>
                         </CardTitle>
                         <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>
@@ -309,6 +310,7 @@ const Rail = React.forwardRef<HTMLDivElement, {
         </div>
     );
 });
+Rail.displayName = "Rail";
 
 
 function Chip({ name }: { name: string }) {

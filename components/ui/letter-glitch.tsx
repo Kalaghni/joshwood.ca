@@ -179,7 +179,7 @@ const LetterGlitch = ({
     };
 
     const drawLetters = () => {
-        if (!context.current || letters.current.length === 0) return;
+        if (!context.current || letters.current.length === 0 || !canvasRef.current) return;
         const ctx = context.current;
         const { width, height } = canvasRef.current!.getBoundingClientRect();
         ctx.clearRect(0, 0, width, height);

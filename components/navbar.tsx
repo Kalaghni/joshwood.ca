@@ -26,6 +26,8 @@ const projects: ProjectProps[] = [
         href: "/projects/shell-gpt"
     }
 ];
+import {SidebarTrigger} from "@/components/ui/sidebar";
+import MainMenu from "@/components/main-menu";
 
 export default function Navbar() {
     const [open, setOpen] = useState(false);
@@ -44,7 +46,7 @@ export default function Navbar() {
     return (
         <div
             ref={menuRef}
-            className="sticky top-0 z-50"
+            className={"bg-background sticky top-0 z-50 w-full rounded-b-sm px-2"}
         >
             <NavigationMenu
                 viewport={true}
@@ -123,6 +125,11 @@ export default function Navbar() {
                             <Link href="/the-watering-can">The Watering Can</Link>
                         </NavigationMenuLink>
                     </NavigationMenuItem>
+            <NavigationMenu viewport={true} orientation="horizontal" className={cn(
+                "sm:flex-row flex-col-reverse sm:justify-between max-w-none sm:items-center items-start"
+            )}>
+                <NavigationMenuList className="hidden sm:flex justify-self-start">
+                    <MainMenu className="hidden sm:block"/>
                 </NavigationMenuList>
 
                 <div className="flex flex-row justify-between w-full">
@@ -155,7 +162,38 @@ export default function Navbar() {
                             </NavigationMenuLink>
                         </NavigationMenuItem>
                     </NavigationMenuList>
+                        <Button
+                            className="sm:hidden"
+                            variant="ghost"
+                            asChild
+                        >
+                            <SidebarTrigger>
+                                <Menu/>
+                            </SidebarTrigger>
+                        </Button>
+                    <NavigationMenuList className="sm:flex-row justify-self-end">
+                        <NavigationMenuItem>
+                            <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                                <Button variant="ghost" asChild>
+                                    <Link target="_blank" href="https://github.com/joshtwc">
+                                        <Github/>
+                                    </Link>
+                                </Button>
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem>
+                            <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                                <Button variant="ghost" asChild>
+                                    <Link target="_blank" href="https://www.linkedin.com/in/joshua-wood-a072a2228/">
+                                        <Linkedin/>
+                                    </Link>
+                                </Button>
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                    </NavigationMenuList>
                 </div>
+            </NavigationMenu>
+            </NavigationMenuList>
             </NavigationMenu>
         </div>
     );
