@@ -12,7 +12,7 @@ export default function Main({ children }: {children?: ReactNode}) {
 
     const [open, setOpen] = useState(false);
 
-    return (
+    return (window !== undefined &&
         <div>
             <SidebarProvider open={open && isMobile} onOpenChange={(open) => {
                 setOpen(open);
