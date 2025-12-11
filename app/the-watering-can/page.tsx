@@ -1,14 +1,10 @@
-'use server'
-import UnderConstruction from "@/components/ui/under-construction";
-
+import Error from "@/components/error";
 
 export default async function TheWateringCan() {
 
     return (
-        <UnderConstruction
-            fullPage        // takes full viewport; remove to let a parent container control height
-            title="Under Construction"
-            description="Wiring up data sources and polishing charts."
+        <Error statusCode={503}
+               title="Page is under construction"
         />
     )
 

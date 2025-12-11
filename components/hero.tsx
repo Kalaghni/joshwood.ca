@@ -17,7 +17,8 @@ export default function Hero() {
                     }}
                 >
                     <H1 className="text-left text-6xl sm:text-9xl">Josh Wood</H1>
-                    <H3 className="text-left text-primary">Developer</H3>
+
+                    <H3 className="text-5xl text-primary sm:mix-blend-saturation">IT · Developer</H3>
                 </div>
             </div>
         </section>

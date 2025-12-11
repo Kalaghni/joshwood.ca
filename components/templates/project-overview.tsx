@@ -1,12 +1,11 @@
 "use client";
 
-import { ReactNode } from "react";
+import {ReactNode} from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { Github, ExternalLink, Video, LinkIcon } from "lucide-react";
+import { GitCommitHorizontal, ExternalLink, Video, LinkIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@radix-ui/react-separator";
 import { cn } from "@/lib/utils";
 
 type MetaItem = {
@@ -18,7 +17,8 @@ type Action =
     | { type: "github"; href: string; label?: string }
     | { type: "demo"; href: string; label?: string }
     | { type: "video"; href: string; label?: string }
-    | { type: "link"; href: string; label: string };
+    | { type: "link"; href: string; label: string }
+    | { type: "node"; content: ReactNode; label?: string };
 
 export type ProjectOverviewProps = {
     title: string;
@@ -27,6 +27,8 @@ export type ProjectOverviewProps = {
     cover?: {
         src: string;
         alt: string;
+        width: number;
+        href?: string;
         aspect?: "16/9" | "4/3" | "3/2" | "21/9";
     };
     meta?: MetaItem[]; // e.g., [{ label: "Role", value: "Lead Dev" }]
@@ -58,11 +60,13 @@ function ActionButton({ action }: { action: Action }) {
             return (
                 <Button asChild variant="secondary" className={common}>
                     <Link href={action.href} target="_blank" aria-label="GitHub">
-                        <Github className="mr-2 h-4 w-4" />
+                        <GitCommitHorizontal className="mr-2 h-4 w-4" />
                         {action.label ?? "GitHub"}
                     </Link>
                 </Button>
             );
+        case "node":
+            return action.content;
         case "demo":
             return (
                 <Button asChild className={common}>
@@ -104,7 +108,9 @@ export default function ProjectOverview({
                                             className,
                                             children,
                                         }: ProjectOverviewProps) {
+
     const aspect = cover?.aspect ?? "16/9";
+
 
     return (
         <section
@@ -136,9 +142,9 @@ export default function ProjectOverview({
                     )}
 
                     {summary && (
-                        <p className="mt-4 text-sm leading-relaxed text-white/80">
+                        <div className="mt-4 text-sm leading-relaxed text-white/80">
                             {summary}
-                        </p>
+                        </div>
                     )}
 
                     {/* Actions */}
@@ -167,15 +173,16 @@ export default function ProjectOverview({
                             aspect === "21/9" && "aspect-[21/9]"
                         )}
                     >
-                        <Image
-                            src={cover.src}
-                            alt={cover.alt}
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 1024px) 100vw, 480px"
-                            priority
-                        />
-                        {/* subtle top gradient */}
+                        <Link href={cover.href ?? cover.src}>
+                            <Image
+                                src={cover.src}
+                                alt={cover.alt}
+                                fill
+                                className="object-cover"
+                                sizes="(max-width: 1024px) 80vw max-w-screen"
+                                priority
+                            />
+                        </Link>
                         <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-black/40 to-transparent" />
                     </motion.div>
                 )}

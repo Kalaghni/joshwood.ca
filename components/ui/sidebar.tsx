@@ -24,6 +24,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import Link from "next/link";
+import {NormalizedHref} from "next/dist/client/components/segment-cache-impl/cache-key";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
@@ -207,7 +209,7 @@ function Sidebar({
 
   return (
     <div
-      className="group peer text-sidebar-foreground hidden md:block"
+      className="group peer text-sidebar-foreground hidden"
       data-state={state}
       data-collapsible={state === "collapsed" ? collapsible : ""}
       data-variant={variant}
@@ -256,6 +258,8 @@ function Sidebar({
 function SidebarTrigger({
   className,
   onClick,
+  children,
+  asChild,
   ...props
 }: React.ComponentProps<typeof Button>) {
   const { toggleSidebar } = useSidebar()
@@ -273,8 +277,13 @@ function SidebarTrigger({
       }}
       {...props}
     >
-      <PanelLeftIcon />
-      <span className="sr-only">Toggle Sidebar</span>
+        {!asChild ?
+            <>
+                <PanelLeftIcon />
+                <span className="sr-only">Toggle Sidebar</span>
+            </>
+        : <></>}
+        {children}
     </Button>
   )
 }
@@ -471,6 +480,19 @@ function SidebarMenuItem({ className, ...props }: React.ComponentProps<"li">) {
       {...props}
     />
   )
+}
+
+function SidebarMenuLink({ className, href, ...props }: React.ComponentProps<"li"> & { href: string } ) {
+    return (
+        <Link href={href}>
+            <li
+                data-slot="sidebar-menu-item"
+                data-sidebar="menu-item"
+                className={cn("group/menu-item relative", className)}
+                {...props}
+            />
+        </Link>
+    )
 }
 
 const sidebarMenuButtonVariants = cva(
@@ -722,5 +744,6 @@ export {
   SidebarRail,
   SidebarSeparator,
   SidebarTrigger,
+  SidebarMenuLink,
   useSidebar,
 }

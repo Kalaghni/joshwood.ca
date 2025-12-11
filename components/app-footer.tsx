@@ -7,7 +7,7 @@ export default function AppFooter() {
             <Separator/>
             <div>
                 <Separator orientation="vertical"/>
-                <P className="text-center">Josh Wood &copy; {(new Date()).getYear()}</P>
+                <P className="text-center">Josh Wood &copy; {(new Date()).getFullYear()}</P>
             </div>
 
         </footer>

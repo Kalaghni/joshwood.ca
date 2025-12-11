@@ -11,15 +11,8 @@ import {ComponentPropsWithoutRef, useState} from "react";
 import {Button} from "@/components/ui/button";
 import {useSidebar} from "@/components/ui/sidebar";
 import {usePathname} from "next/navigation";
+import {projects} from "@/configs/nav.config";
 
-export interface ProjectProps {
-    title: string;
-    description: string;
-    href: string;
-}
-const projects: ProjectProps[] = [
-
-]
 export default function MainMenu({className, triggerClassName}: {className?: string, triggerClassName?: string}) {
 
     const pathname = usePathname();

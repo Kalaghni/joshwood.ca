@@ -11,7 +11,6 @@ import {NavigationMenu, NavigationMenuList} from "@/components/ui/navigation-men
 import {Button} from "@/components/ui/button";
 import {SidebarClose} from "lucide-react";
 import {useEffect} from "react";
-import Footer from "@/app/footer";
 import AppFooter from "@/components/app-footer";
 
 export function AppSidebar({className}: {className?: string}) {
@@ -44,7 +43,7 @@ export function AppSidebar({className}: {className?: string}) {
                 <SidebarGroup className="items-stretch w-full">
                     <NavigationMenu viewport={false} className="max-w-none items-stretch flex-col">
                         <NavigationMenuList className="flex-col items-stretch">
-                            <MainMenu triggerClassName="w-full"/>
+                            {/*<MainMenu triggerClassName="w-full"/>*/}
                         </NavigationMenuList>
                     </NavigationMenu>
                 </SidebarGroup>

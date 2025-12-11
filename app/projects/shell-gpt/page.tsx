@@ -3,6 +3,8 @@
 
 import ProjectOverview from "@/components/templates/project-overview";
 import CodeBlock from "@/components/ui/code-block";
+import {Badge} from "@/components/ui/badge";
+import Link from "next/link";
 
 export default function ShellGptProjectPage() {
     return (
@@ -21,6 +23,7 @@ export default function ShellGptProjectPage() {
                     src: "/shell-gpt-screenshot.png",
                     alt: "Shell-GPT terminal screenshot",
                     aspect: "16/9",
+                    width: 1280
                 }}
                 meta={[
                     { label: "Type", value: "CLI Tool" },
@@ -31,6 +34,16 @@ export default function ShellGptProjectPage() {
                 actions={[
                     { type: "github", href: "https://github.com/Kalaghni/shell-gpt", label: "Repository" },
                     { type: "link", href: "https://github.com/Kalaghni/shell-gpt#readme", label: "Docs" },
+                    { type: "node", content: (
+                            <div className="w-full mt-4">
+                                <Link href="https://github.com/stiamprie/echoSH/actions/workflows/build.yml">
+                                    <img
+                                        src="https://github.com/echosh-labs/echoSH/actions/workflows/build.yml/badge.svg?branch=main"
+                                        alt="Build Electron App"/>
+                                </Link>
+                            </div>
+                        )
+                    }
                 ]}
             >
                 <h3>Install</h3>
@@ -50,7 +63,7 @@ git clone https://github.com/<you>/shell-gpt
 cd shell-gpt && pnpm i && pnpm build && pnpm link --global`}
                 />
 
-                <h3>Configuration</h3>
+                <h3>Configuration <Badge variant="outline" children=".env"/></h3>
                 <CodeBlock
                     language="bash"
                     code={`# OpenAI

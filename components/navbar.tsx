@@ -13,27 +13,10 @@ import Link from "next/link";
 import {Github, Linkedin, Menu} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {cn} from "@/lib/utils";
+import {SidebarTrigger} from "@/components/ui/sidebar";
+import {projects} from "@/configs/nav.config";
 
-export interface ProjectProps {
-    title: string;
-    description: string;
-    href: string;
-}
-const projects: ProjectProps[] = [
-    {
-        title: "Shell-GPT",
-        description: "An electron-based 'shell' that wraps GPT, and executes its commands in a Docker container.",
-        href: "/projects/shell-gpt"
-    },
-    {
-        title: "Sirocco",
-        description: "The Synesthetic Terminal",
-        href: "/projects/sirocco"
-    }
-];
-// import MainMenu from "@/components/main-menu";
-
-export default function Navbar() {
+export default function Navbar({sidebar = false}: {sidebar?: boolean}) {
     const [open, setOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement | null>(null);
 
@@ -60,6 +43,9 @@ export default function Navbar() {
                     "bg-black/40 backdrop-blur-lg shadow-lg rounded-xl p-3 transition-all duration-300"
                 )}
             >
+                <SidebarTrigger asChild className="sm:hidden">
+                    <Menu />
+                </SidebarTrigger>
                 <NavigationMenuList
                     className={cn(
                         "items-start sm:items-center sm:flex-row",
@@ -69,9 +55,11 @@ export default function Navbar() {
                     <NavigationMenuItem>
                         <NavigationMenuTrigger
                             id="home"
-                            className="transition-transform hover:scale-105 hover:text-white"
+                            asChild
                         >
-                            Home
+                            <NavigationMenuLink href="/" className="transition-transform hover:scale-105 hover:text-white">
+                                Home
+                            </NavigationMenuLink>
                         </NavigationMenuTrigger>
                         <NavigationMenuContent popoverTarget="#home">
                             <ul className="grid gap-2 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
@@ -103,6 +91,13 @@ export default function Navbar() {
                         </NavigationMenuContent>
                     </NavigationMenuItem>
                     <NavigationMenuItem>
+                        <NavigationMenuTrigger>
+                            <NavigationMenuLink href="/contact" className="transition-transform hover:scale-105 hover:text-white">
+                                Contact
+                            </NavigationMenuLink>
+                        </NavigationMenuTrigger>
+                    </NavigationMenuItem>
+                    <NavigationMenuItem>
                         <NavigationMenuTrigger className="transition-transform hover:scale-105 hover:text-white">
                             Projects
                         </NavigationMenuTrigger>
@@ -129,74 +124,67 @@ export default function Navbar() {
                             <Link href="/the-watering-can">The Watering Can</Link>
                         </NavigationMenuLink>
                     </NavigationMenuItem>
-                <NavigationMenu viewport={true} orientation="horizontal" className={cn(
-                    "sm:flex-row flex-col-reverse sm:justify-between max-w-none sm:items-center items-start"
-                )}>
-                    <NavigationMenuList className="hidden sm:flex justify-self-start">
-                        {/*<MainMenu className="hidden sm:block"/>*/}
-                    </NavigationMenuList>
-
-                    <div className="flex flex-row justify-between w-full">
-                        <Button
-                            className="sm:hidden hover:scale-105 transition-transform"
-                            variant="ghost"
-                            onClick={() => setOpen(!open)}
-                        >
-                            <Menu />
-                        </Button>
-                        <NavigationMenuList className="sm:flex-row justify-self-end gap-2">
-                            <NavigationMenuItem>
-                                <NavigationMenuLink
-                                    asChild
-                                    className="hover:scale-110 transition-transform hover:text-white"
-                                >
-                                    <Link target="_blank" href="https://github.com/joshtwc">
-                                        <Github />
-                                    </Link>
-                                </NavigationMenuLink>
-                            </NavigationMenuItem>
-                            <NavigationMenuItem>
-                                <NavigationMenuLink
-                                    asChild
-                                    className="hover:scale-110 transition-transform hover:text-white"
-                                >
-                                    <Link target="_blank" href="https://www.linkedin.com/in/joshua-wood-a072a2228/">
-                                        <Linkedin />
-                                    </Link>
-                                </NavigationMenuLink>
-                            </NavigationMenuItem>
+                    <NavigationMenu viewport={true} orientation="horizontal" className={cn(
+                        "sm:flex-row flex-col-reverse sm:justify-between max-w-none sm:items-center items-start"
+                    )}>
+                        <NavigationMenuList className="hidden sm:flex justify-self-start">
+                            {/*<MainMenu className="hidden sm:block"/>*/}
                         </NavigationMenuList>
+
+                        <div className="flex flex-row justify-between w-full">
+                            <NavigationMenuList className="sm:flex-row justify-self-end gap-2">
+                                <NavigationMenuItem>
+                                    <NavigationMenuLink
+                                        asChild
+                                        className="hover:scale-110 transition-transform hover:text-white"
+                                    >
+                                        <Link target="_blank" href="https://github.com/joshtwc">
+                                            <Github />
+                                        </Link>
+                                    </NavigationMenuLink>
+                                </NavigationMenuItem>
+                                <NavigationMenuItem>
+                                    <NavigationMenuLink
+                                        asChild
+                                        className="hover:scale-110 transition-transform hover:text-white"
+                                    >
+                                        <Link target="_blank" href="https://www.linkedin.com/in/joshua-wood-a072a2228/">
+                                            <Linkedin />
+                                        </Link>
+                                    </NavigationMenuLink>
+                                </NavigationMenuItem>
+                            </NavigationMenuList>
                             <Button
                                 className=""
                                 variant="ghost"
                                 asChild
                             >
                                 {/*<SidebarTrigger>*/}
-                                    <Menu/>
+                                <Menu/>
                                 {/*</SidebarTrigger>*/}
                             </Button>
-                        <NavigationMenuList className="sm:flex-row justify-self-end">
-                            <NavigationMenuItem>
-                                <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-                                    <Button variant="ghost" asChild>
-                                        <Link target="_blank" href="https://github.com/joshtwc">
-                                            <Github/>
-                                        </Link>
-                                    </Button>
-                                </NavigationMenuLink>
-                            </NavigationMenuItem>
-                            <NavigationMenuItem>
-                                <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-                                    <Button variant="ghost" asChild>
-                                        <Link target="_blank" href="https://www.linkedin.com/in/joshua-wood-a072a2228/">
-                                            <Linkedin/>
-                                        </Link>
-                                    </Button>
-                                </NavigationMenuLink>
-                            </NavigationMenuItem>
-                        </NavigationMenuList>
-                    </div>
-                </NavigationMenu>
+                            <NavigationMenuList className="sm:flex-row justify-self-end">
+                                <NavigationMenuItem>
+                                    <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                                        <Button variant="ghost" asChild>
+                                            <Link target="_blank" href="https://github.com/joshtwc">
+                                                <Github/>
+                                            </Link>
+                                        </Button>
+                                    </NavigationMenuLink>
+                                </NavigationMenuItem>
+                                <NavigationMenuItem>
+                                    <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                                        <Button variant="ghost" asChild>
+                                            <Link target="_blank" href="https://www.linkedin.com/in/joshua-wood-a072a2228/">
+                                                <Linkedin/>
+                                            </Link>
+                                        </Button>
+                                    </NavigationMenuLink>
+                                </NavigationMenuItem>
+                            </NavigationMenuList>
+                        </div>
+                    </NavigationMenu>
                 </NavigationMenuList>
             </NavigationMenu>
         </div>

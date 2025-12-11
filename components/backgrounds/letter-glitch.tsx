@@ -11,12 +11,12 @@ const LetterGlitch = ({
                           smooth = true,
     className,
                       }: {
-    parentRef: RefObject<HTMLDivElement|null>;
-    glitchColors: string[];
-    glitchSpeed: number;
-    centerVignette: boolean;
-    outerVignette: boolean;
-    smooth: boolean;
+    parentRef?: RefObject<HTMLDivElement|null>;
+    glitchColors?: string[];
+    glitchSpeed?: number;
+    centerVignette?: boolean;
+    outerVignette?: boolean;
+    smooth?: boolean;
     className?: string;
 }) => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);

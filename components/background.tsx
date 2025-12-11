@@ -10,7 +10,7 @@ export default function TechBackground({
             aria-hidden
             className={[
                 // full-bleed, behind everything
-                "pointer-events-none fixed inset-0 -z-10",
+                "pointer-events-none fixed inset-0 -z-1",
                 // base: soft radial vignette that adapts to theme
                 "bg-[radial-gradient(1200px_800px_at_50%_0%,hsl(var(--bg-top))_0%,transparent_60%)]",
                 className,

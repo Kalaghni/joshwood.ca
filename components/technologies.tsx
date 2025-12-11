@@ -14,6 +14,7 @@ import {
     ShoppingCart, CreditCard, CalendarClock, Route, PhoneCall, Smartphone, Nfc,
 } from "lucide-react";
 import H2 from "@/components/typography/h2";
+import {cn} from "@/lib/utils";
 
 type Group = "Frontend" | "Backend" | "Data" | "DevOps" | "Integrations" | "Other";
 
@@ -61,11 +62,11 @@ function iconFor(name: string): React.ReactNode {
 const SITE_TECH: Tech[] = [
     { name: "TypeScript", group: "Frontend" },
     { name: "React", group: "Frontend" },
-    { name: "Next.js", group: "Frontend" },
+    { name: "Next.js", group: "Frontend", href: "https://nextjs.org" },
     { name: "Tailwind CSS", group: "Frontend" },
-    { name: "shadcn/ui", group: "Frontend" },
+    { name: "shadcn/ui", group: "Frontend", href: "https://ui.shadcn.com/" },
     { name: "Electron", group: "Frontend" },
-    { name: "PHP", group: "Backend" },
+    { name: "PHP", group: "Backend", href: "https://php.net" },
     { name: "WordPress", group: "Backend", href: "https://wordpress.org" },
     { name: "WooCommerce", group: "Backend", href: "https://woocommerce.com" },
     { name: "Node.js", group: "Backend" },
@@ -77,8 +78,8 @@ const SITE_TECH: Tech[] = [
     { name: "NGINX", group: "DevOps" },
     { name: "Apache", group: "DevOps" },
     { name: "Proxmox", group: "DevOps" },
-    { name: "Stripe", group: "Integrations" },
-    { name: "Onfleet", group: "Integrations" },
+    { name: "Stripe", group: "Integrations", href: "https://stripe.com" },
+    { name: "Onfleet", group: "Integrations", href: "https://onfleet.com" },
     { name: "Asterisk/FreePBX", group: "Integrations" },
     { name: "Acuity Scheduling", group: "Integrations", href: "https://acuityscheduling.com" },
     { name: "Android/Kotlin", group: "Other" },
@@ -110,28 +111,31 @@ export default function Technologies({
     }, [items]);
 
     return (
-        <section id="technologies" className="relative w-full">
-            <div className="mx-auto my-36 w-full max-w-6xl px-4 sm:px-6">
-                <Card className="bg-background/70 backdrop-blur supports-[backdrop-filter]:backdrop-blur border-muted/50 shadow-sm">
+        <section id="technologies" className="relative w-full" data-anchor>
+            <div className="mx-auto mt-36 w-full max-w-6xl px-4 sm:px-6">
+
+                <Card className="relative mx-auto w-full max-w-5xl rounded-2xl border border-white/10 bg-black/40 backdrop-blur-xl">
                     <CardHeader className="pb-2">
                         <CardTitle className="flex items-center gap-2">
                             <Code2 className="h-5 w-5" />
                             <H2>{title}</H2>
-                            <Badge className="ml-1 rounded-full" variant="secondary">Stack</Badge>
+                            <Badge className="ml-1 rounded-full max-sm:hidden" variant="secondary">Stack</Badge>
                         </CardTitle>
                         <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>
                     </CardHeader>
 
-                    <Separator className="mx-4" />
+                    <Separator style={{
+                        width: "calc(100% - (4px * 2rem))",
+                    }} className="tech-separator mx-4"/>
 
-                    <CardContent className="pt-5">
+                    <CardContent className="pt-5 px-0">
                         <div
                             className="relative"
                             style={{ '--gapY': `${gapY}px` } as React.CSSProperties}
                         >
                             {/* Edge fades */}
-                            <div className="pointer-events-none absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-background to-transparent z-10" />
-                            <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-background to-transparent z-10" />
+                            <div className="pointer-events-none absolute inset-y-0 left-0 w-8 from-background to-transparent z-10" />
+                            <div className="pointer-events-none absolute inset-y-0 right-0 w-8 from-background to-transparent z-10" />
 
                             <MarqueeRow
                                 items={rowA}
