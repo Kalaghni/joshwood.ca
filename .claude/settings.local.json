@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx shadcn@latest add:*)",
+      "Bash(findstr:*)",
+      "Bash(printf:*)",
+      "WebFetch(domain:ui.shadcn.com)",
+      "Bash(npm install @dnd-kit/core @dnd-kit/sortable @dnd-kit/utilities @tanstack/react-table zod @tabler/icons-react recharts mongodb)",
+      "Bash(npm install:*)",
+      "Bash(node -e:*)",
+      "Bash(ls:*)",
+      "Bash(npm run build:*)",
+      "Bash(git checkout:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}

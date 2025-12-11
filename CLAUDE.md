@@ -58,3 +58,4 @@ Navigation structure is defined in `configs/nav.config.tsx`. The `mainNav` array
 ### Theme
 
 Dark theme is the default. Theme toggling via `next-themes` with the `ThemeProvider` component.
+- when shadcn prompts to overwrite, never say yes
