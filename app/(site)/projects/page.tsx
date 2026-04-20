@@ -1,70 +1,76 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { projects, type ProjectProps } from "@/configs/nav.config";
+import { getProjects, seedProjects, type Project } from "@/lib/projects";
+import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
+import {Badge} from "@/components/ui/badge";
 
-function ProjectCard({ project }: { project: ProjectProps }) {
+export const metadata: Metadata = {
+  title: "Projects",
+  description:
+    "Explore my portfolio of web development projects built with TypeScript, React, Next.js, and more.",
+  openGraph: {
+    title: "Projects | Josh Wood",
+    description:
+      "Explore my portfolio of web development projects built with TypeScript, React, Next.js, and more.",
+  },
+};
+
+function ProjectCard({ project }: { project: Project }) {
   return (
     <Link
-      href={project.href}
-      className={cn(
-        "group relative flex flex-col overflow-hidden rounded-2xl",
-        "border border-white/10 bg-black/40 backdrop-blur-xl",
-        "shadow-[0_8px_32px_-8px_rgba(0,0,0,0.5)] ring-1 ring-white/5",
-        "transition-all duration-300",
-        "hover:border-white/20 hover:shadow-[0_16px_48px_-12px_rgba(0,0,0,0.6)]",
-        "hover:-translate-y-1"
-      )}
+      href={`/projects/${project.slug}`}
     >
-      {/* Cover Image */}
-      {project.cover && (
-        <div className="relative aspect-[16/9] w-full overflow-hidden">
-          <Image
-            src={project.cover}
-            alt={project.title}
-            fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-        </div>
-      )}
+      <Card className="pt-0 contain-content">
+        <CardHeader className="contain-content aspect-[16/9]">
 
-      {/* Content */}
-      <div className="flex flex-1 flex-col p-5">
-        <h2 className="text-lg font-semibold text-white group-hover:text-white/90">
-          {project.title}
-        </h2>
-        <p className="mt-2 flex-1 text-sm leading-relaxed text-white/70">
-          {project.description}
-        </p>
-
-        {/* Tech Pills */}
-        {project.tech && project.tech.length > 0 && (
-          <div className="mt-4 flex flex-wrap gap-2">
-            {project.tech.map((t) => (
-              <span
-                key={t}
-                className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-xs text-white/70"
-              >
-                {t}
-              </span>
-            ))}
-          </div>
-        )}
-
-        {/* View Project Link */}
-        <div className="mt-4 flex items-center gap-1 text-sm font-medium text-white/60 transition-colors group-hover:text-white">
-          View project
-          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-        </div>
-      </div>
+          {!!project.cover &&
+              <>
+                <Image
+                    src={project.cover}
+                    alt={project.title}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105 "
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+              </>
+          }
+        </CardHeader>
+        <CardContent className="space-y-2">
+          <CardTitle>{project.title}</CardTitle>
+          <CardDescription>
+            {project.description}
+            {project.tech && project.tech.length > 0 && (
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {project.tech.map((t) => (
+                      <Badge variant="outline" key={t}>
+                        {t}
+                      </Badge>
+                  ))}
+                </div>
+            )}
+          </CardDescription>
+        </CardContent>
+        <CardFooter>
+          {/*<Button variant="link" size="sm" className="px-0">*/}
+            <div className="flex flex-row items-center gap-1 text-primary text-sm font-medium">
+                View project
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </div>
+          {/*</Button>*/}
+        </CardFooter>
+      </Card>
     </Link>
   );
 }
 
-export default function ProjectsPage() {
+export default async function ProjectsPage() {
+  // Seed projects if none exist
+  await seedProjects();
+  const projects = await getProjects(true); // Only published projects
+
   return (
     <section className="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
       {/* Header */}
@@ -80,7 +86,7 @@ export default function ProjectsPage() {
       {/* Grid */}
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {projects.map((project) => (
-          <ProjectCard key={project.href} project={project} />
+          <ProjectCard key={project._id} project={project} />
         ))}
       </div>
     </section>

@@ -11,6 +11,8 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { usePathname } from "next/navigation";
+import ThemeToggle from "@/components/theme-toggle";
+import {Fragment} from "react";
 
 export function AdminHeader() {
   const pathname = usePathname();
@@ -25,25 +27,28 @@ export function AdminHeader() {
   });
 
   return (
-    <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
-      <SidebarTrigger className="-ml-1" />
-      <Separator orientation="vertical" className="mr-2 h-4" />
-      <Breadcrumb>
-        <BreadcrumbList>
-          {breadcrumbs.map((crumb, index) => (
-            <BreadcrumbItem key={crumb.href}>
-              {crumb.isLast ? (
-                <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
-              ) : (
-                <>
-                  <BreadcrumbLink href={crumb.href}>{crumb.label}</BreadcrumbLink>
-                  {index < breadcrumbs.length - 1 && <BreadcrumbSeparator />}
-                </>
-              )}
-            </BreadcrumbItem>
-          ))}
-        </BreadcrumbList>
-      </Breadcrumb>
+    <header className="flex justify-between items-center border-b px-4 py-2 h-16">
+      <div className="flex shrink-0 items-center gap-2">
+        <SidebarTrigger className="-ml-1" />
+        <Separator orientation="vertical" className="mr-2 h-4" />
+        <Breadcrumb>
+          <BreadcrumbList>
+            {breadcrumbs.map((crumb, index) => (
+              <Fragment key={index}>
+                <BreadcrumbItem key={crumb.href}>
+                  {crumb.isLast ? (
+                    <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
+                  ) : (
+                      <BreadcrumbLink href={crumb.href}>{crumb.label}</BreadcrumbLink>
+                  )}
+                </BreadcrumbItem>
+                {!crumb.isLast && index < breadcrumbs.length - 1 && <BreadcrumbSeparator />}
+              </Fragment>
+            ))}
+          </BreadcrumbList>
+        </Breadcrumb>
+      </div>
+      <ThemeToggle/>
     </header>
   );
 }

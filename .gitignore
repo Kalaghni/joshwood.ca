@@ -22,7 +22,10 @@
 
 # misc
 .DS_Store
+
+# SSL
 *.pem
+*.key
 
 # debug
 npm-debug.log*
@@ -39,3 +42,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+.idea
+.claude

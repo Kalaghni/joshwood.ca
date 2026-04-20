@@ -7,6 +7,8 @@ import Link from "next/link";
 import { GitCommitHorizontal, ExternalLink, Video, LinkIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import {Dialog, DialogContent, DialogTrigger} from "@/components/ui/dialog";
+import {Badge} from "@/components/ui/badge";
 
 type MetaItem = {
     label: string;
@@ -19,6 +21,12 @@ type Action =
     | { type: "video"; href: string; label?: string }
     | { type: "link"; href: string; label: string }
     | { type: "node"; content: ReactNode; label?: string };
+
+export type GitHubBadge = {
+    workflowUrl: string;
+    branch?: string;
+    label?: string;
+};
 
 export type ProjectOverviewProps = {
     title: string;
@@ -34,23 +42,12 @@ export type ProjectOverviewProps = {
     meta?: MetaItem[]; // e.g., [{ label: "Role", value: "Lead Dev" }]
     tech?: string[];   // e.g., ["Next.js", "TypeScript", "Tailwind", "Framer Motion"]
     actions?: Action[]; // github/demo/video/link
+    githubBadge?: GitHubBadge; // optional workflow status badge
     className?: string;
 
     /** Optional slots for page-specific content */
     children?: ReactNode; // You can inject sections below the header
 };
-
-/** Small helper for consistent pill styling */
-function Pill({ children }: { children: ReactNode }) {
-    return (
-        <span
-            className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80 transition
-                 hover:border-white/20 hover:bg-white/[0.08] hover:text-white"
-        >
-      {children}
-    </span>
-    );
-}
 
 function ActionButton({ action }: { action: Action }) {
     const common =
@@ -58,7 +55,7 @@ function ActionButton({ action }: { action: Action }) {
     switch (action.type) {
         case "github":
             return (
-                <Button asChild variant="secondary" className={common}>
+                <Button asChild className={common}>
                     <Link href={action.href} target="_blank" aria-label="GitHub">
                         <GitCommitHorizontal className="mr-2 h-4 w-4" />
                         {action.label ?? "GitHub"}
@@ -97,6 +94,17 @@ function ActionButton({ action }: { action: Action }) {
     }
 }
 
+/** Build GitHub Actions badge URL from workflow URL */
+function buildBadgeUrl(badge: GitHubBadge): string {
+    // Example input: https://github.com/user/repo/actions/workflows/ci.yml
+    // Output: https://github.com/user/repo/actions/workflows/ci.yml/badge.svg?branch=main
+    const url = new URL(badge.workflowUrl);
+    const badgeUrl = `${url.origin}${url.pathname}/badge.svg`;
+    const params = new URLSearchParams();
+    if (badge.branch) params.set("branch", badge.branch);
+    return params.toString() ? `${badgeUrl}?${params}` : badgeUrl;
+}
+
 export default function ProjectOverview({
                                             title,
                                             subtitle,
@@ -105,6 +113,7 @@ export default function ProjectOverview({
                                             meta = [],
                                             tech = [],
                                             actions = [],
+                                            githubBadge,
                                             className,
                                             children,
                                         }: ProjectOverviewProps) {
@@ -116,7 +125,7 @@ export default function ProjectOverview({
         <section
             className={cn(
                 // glassy container that pops on dark backgrounds
-                "relative mx-auto w-full max-w-5xl rounded-2xl border border-white/10 bg-black/40 backdrop-blur-xl",
+                "relative mx-auto w-full max-w-5xl rounded-2xl border border-white/10 bg-background/40 backdrop-blur-xl",
                 "shadow-[0_10px_40px_-10px_rgba(0,0,0,0.6)] ring-1 ring-white/5",
                 "p-5 sm:p-8",
                 "before:pointer-events-none before:absolute before:inset-0 before:rounded-2xl before:bg-gradient-to-b before:from-white/5 before:to-transparent",
@@ -134,15 +143,15 @@ export default function ProjectOverview({
                 className="grid gap-6 md:grid-cols-[1.2fr_.8fr] md:items-start"
             >
                 <div>
-                    <h1 className="text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+                    <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
                         {title}
                     </h1>
                     {subtitle && (
-                        <p className="mt-1 text-sm text-white/70">{subtitle}</p>
+                        <p className="mt-1 text-sm text-foreground/70">{subtitle}</p>
                     )}
 
                     {summary && (
-                        <div className="mt-4 text-sm leading-relaxed text-white/80">
+                        <div className="mt-4 text-sm leading-relaxed text-foreground/80">
                             {summary}
                         </div>
                     )}
@@ -153,6 +162,24 @@ export default function ProjectOverview({
                             {actions.map((a, i) => (
                                 <ActionButton key={i} action={a} />
                             ))}
+                        </div>
+                    )}
+
+                    {/* GitHub Workflow Badge */}
+                    {githubBadge && (
+                        <div className="w-full pt-4">
+                            <Link
+                                href={githubBadge.workflowUrl}
+                                target="_blank"
+                                className="mt-3 inline-block"
+                            >
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img
+                                    src={buildBadgeUrl(githubBadge)}
+                                    alt={githubBadge.label || "GitHub Actions"}
+                                    className="h-5"
+                                />
+                            </Link>
                         </div>
                     )}
                 </div>
@@ -173,15 +200,29 @@ export default function ProjectOverview({
                             aspect === "21/9" && "aspect-[21/9]"
                         )}
                     >
+                        <Dialog>
+                            <DialogContent className="aspect-video w-[80vw] contain-content">
+                                <Image
+                                    src={cover.src}
+                                    alt={cover.alt}
+                                    fill
+                                    className="object-cover"
+                                    sizes="(max-width: 1024px) 80vw max-w-screen 80vw"
+                                    priority
+                                />
+                            </DialogContent>
+                            <DialogTrigger>
+                                <Image
+                                    src={cover.src}
+                                    alt={cover.alt}
+                                    fill
+                                    className="object-cover"
+                                    sizes="(max-width: 1024px) 80vw max-w-screen"
+                                    priority
+                                />
+                            </DialogTrigger>
+                        </Dialog>
                         <Link href={cover.href ?? cover.src}>
-                            <Image
-                                src={cover.src}
-                                alt={cover.alt}
-                                fill
-                                className="object-cover"
-                                sizes="(max-width: 1024px) 80vw max-w-screen"
-                                priority
-                            />
                         </Link>
                         <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-black/40 to-transparent" />
                     </motion.div>
@@ -198,13 +239,13 @@ export default function ProjectOverview({
                                 {meta.map((m, i) => (
                                     <div
                                         key={i}
-                                        className="rounded-lg border border-white/10 bg-white/5 p-3 transition
-                               hover:border-white/20 hover:bg-white/[0.07]"
+                                        className="rounded-lg border border-background/10 bg-background/5 p-3 transition
+                               hover:border-background/20 hover:bg-background/[0.07]"
                                     >
-                                        <dt className="text-[11px] uppercase tracking-wide text-white/50">
+                                        <dt className="text-[11px] uppercase tracking-wide text-foreground/50">
                                             {m.label}
                                         </dt>
-                                        <dd className="mt-1 text-sm text-white/90">{m.value}</dd>
+                                        <dd className="mt-1 text-sm text-foreground/90">{m.value}</dd>
                                     </div>
                                 ))}
                             </dl>
@@ -212,12 +253,12 @@ export default function ProjectOverview({
 
                         {tech.length > 0 && (
                             <div>
-                                <div className="mb-2 text-[11px] uppercase tracking-wide text-white/50">
+                                <div className="mb-2 text-[11px] uppercase tracking-wide text-foreground/50">
                                     Tech
                                 </div>
                                 <div className="flex flex-wrap gap-2">
                                     {tech.map((t) => (
-                                        <Pill key={t}>{t}</Pill>
+                                        <Badge variant="outline" key={t}>{t}</Badge>
                                     ))}
                                 </div>
                             </div>
@@ -229,7 +270,6 @@ export default function ProjectOverview({
             {/* Custom sections (highlights, problems/solutions, etc.) */}
             {children && (
                 <>
-                    <div className="my-6 h-px w-full bg-white/10" />
                     <div className="prose prose-invert prose-sm max-w-none">
                         {children}
                     </div>

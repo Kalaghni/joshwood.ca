@@ -15,6 +15,9 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/next.config.ts ./
+COPY --from=builder /app/server.js ./server.js
+COPY --from=builder /app/cert.PEM ./cert.PEM
+COPY --from=builder /app/priv.key ./priv.key
 
 EXPOSE 3000
-CMD ["npm", "start"]
+CMD ["node", "server.js"]

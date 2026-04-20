@@ -1,37 +1,34 @@
-// components/TechBackground.tsx
-"use client";
-import * as React from "react";
+"use client"
+import Prism from "@/components/backgrounds/Prism";
+import {usePathname} from "next/navigation";
+import {useBackgroundToggle} from "@/components/background-toggle";
 
-export default function TechBackground({
-                                           className = "",
-                                       }: { className?: string }) {
+export default function Background() {
+
+    const pathname = usePathname();
+    const {enabled} = useBackgroundToggle();
+
+    const isHome = pathname === '/';
+
     return (
-        <div
-            aria-hidden
-            className={[
-                // full-bleed, behind everything
-                "pointer-events-none fixed inset-0 -z-1",
-                // base: soft radial vignette that adapts to theme
-                "bg-[radial-gradient(1200px_800px_at_50%_0%,hsl(var(--bg-top))_0%,transparent_60%)]",
-                className,
-            ].join(" ")}
-        >
-            {/* Subtle grid (SVG) */}
-            <div className="absolute inset-0 bg-tech-grid opacity-[0.14] dark:opacity-[0.12]" />
-
-            {/* Faint vertical glow columns */}
-            <div className="absolute inset-0 mix-blend-screen dark:mix-blend-soft-light">
-                <div className="absolute inset-y-0 left-1/4 w-[16vw] bg-tech-col glow blur-3xl opacity-40" />
-                <div className="absolute inset-y-0 right-[22%] w-[14vw] bg-tech-col glow blur-3xl opacity-30" />
-            </div>
-
-            {/* Optional micro-noise for banding */}
-            <div className="absolute inset-0 bg-tech-noise opacity-[0.035] dark:opacity-[0.04]" />
-
-            {/* Slow scanline sweep (respects reduced motion) */}
-            <div className="absolute inset-0 [mask-image:linear-gradient(180deg,transparent,black_20%,black_80%,transparent)]">
-                <div className="absolute -inset-y-1 inset-x-0 bg-tech-scan will-change-transform animate-scan-slow" />
-            </div>
+        <div id="background" className="-z-10 fixed inset-0 overflow-hidden top-[var(--header-height)] h-[calc(100vh_-_var(--header-height))] bg-background">
+            {enabled && (
+                <Prism
+                    offset={{
+                        y: isHome ? 120 : 0,
+                        x: 0
+                    }}
+                    animationType="rotate"
+                    timeScale={0.5}
+                    height={1.75}
+                    baseWidth={2.75}
+                    hueShift={0}
+                    colorFrequency={2}
+                    noise={0.5}
+                    glow={1}
+                />
+            )}
         </div>
-    );
+    )
+
 }

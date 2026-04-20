@@ -1,6 +1,7 @@
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { getDatabase } from "./mongodb";
+import type { UserRole } from "./users";
 
 const JWT_SECRET = new TextEncoder().encode(
   process.env.JWT_SECRET || "your-secret-key-change-in-production"
@@ -10,10 +11,16 @@ export interface AdminUser {
   _id: string;
   email: string;
   name: string;
+  role: UserRole;
 }
 
 export async function createToken(user: AdminUser): Promise<string> {
-  return new SignJWT({ userId: user._id, email: user.email, name: user.name })
+  return new SignJWT({
+    userId: user._id,
+    email: user.email,
+    name: user.name,
+    role: user.role,
+  })
     .setProtectedHeader({ alg: "HS256" })
     .setExpirationTime("7d")
     .sign(JWT_SECRET);
@@ -26,6 +33,7 @@ export async function verifyToken(token: string): Promise<AdminUser | null> {
       _id: payload.userId as string,
       email: payload.email as string,
       name: payload.name as string,
+      role: (payload.role as UserRole) || "admin",
     };
   } catch {
     return null;
@@ -48,6 +56,9 @@ export async function validateCredentials(
 
   if (!user) return null;
 
+  // Check if user is active
+  if (user.active === false) return null;
+
   // Simple password comparison - in production use bcrypt
   // For now, storing hashed passwords in MongoDB
   const bcrypt = await import("bcryptjs");
@@ -59,5 +70,6 @@ export async function validateCredentials(
     _id: user._id.toString(),
     email: user.email,
     name: user.name,
+    role: user.role || "admin",
   };
 }

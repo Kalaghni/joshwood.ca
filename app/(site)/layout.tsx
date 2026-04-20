@@ -3,38 +3,84 @@ import ReturnToTopButton from "@/components/ui/return-to-top";
 import {Sidebar, SidebarProvider, SidebarRail, SidebarTrigger} from "@/components/ui/sidebar";
 import NavDesktop from "@/components/navigation/nav-desktop";
 import {cn} from "@/lib/utils";
-import {Menu} from "lucide-react";
+import {LayoutDashboard, LogIn, Menu} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import NavMobile from "@/components/navigation/nav-mobile";
 import Footer from "@/app/(site)/footer";
-import Logo from "@/components/logo";
+import Logo from "@/components/icons/logo";
 import ThemeToggle from "@/components/theme-toggle";
-import Prism from "@/components/backgrounds/Prism";
+import {getProjects, seedProjects} from "@/lib/projects";
+import {buildMainNav} from "@/configs/nav.config";
+import Link from "next/link";
+import {getCurrentUser} from "@/lib/auth";
+import Background from "@/components/background";
+import {BackgroundToggleProvider} from "@/components/background-toggle";
 
-export default function SiteLayout({
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://joshwood.ca";
+
+const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "Person",
+            "@id": `${siteUrl}/#person`,
+            name: "Josh Wood",
+            url: siteUrl,
+            jobTitle: "Full-Stack Developer",
+            knowsAbout: [
+                "TypeScript",
+                "React",
+                "Next.js",
+                "Node.js",
+                "Web Development",
+            ],
+            sameAs: [
+                "https://github.com/Kalaghni",
+            ],
+        },
+        {
+            "@type": "WebSite",
+            "@id": `${siteUrl}/#website`,
+            url: siteUrl,
+            name: "Josh Wood",
+            description:
+                "Full-stack developer specializing in TypeScript, React, and Next.js.",
+            author: {
+                "@id": `${siteUrl}/#person`,
+            },
+        },
+    ],
+};
+
+export default async function SiteLayout({
     children,
 }: Readonly<{
     children: ReactNode;
 }>) {
+    // Check auth status and fetch projects for nav
+    const user = await getCurrentUser();
+    await seedProjects();
+    const projects = await getProjects(true);
+    const navItems = buildMainNav(
+        projects.map((p) => ({
+            title: p.title,
+            description: p.description,
+            href: `/projects/${p.slug}`,
+        }))
+    );
+
     return (
-        <>
+        <BackgroundToggleProvider>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
             <ThemeToggle className="fixed bottom-8 right-4 z-100 bg-background"/>
-            <div id="background" className="-z-10 fixed inset-0 overflow-hidden top-[var(--header-height)] h-[calc(100vh_-_var(--header-height))]">
-                <Prism
-                    animationType="rotate"
-                    timeScale={0.5}
-                    height={3.5}
-                    baseWidth={5.5}
-                    hueShift={0}
-                    colorFrequency={1}
-                    noise={0.5}
-                    glow={1}
-                />
-            </div>
+            <Background/>
 
             <SidebarProvider>
-                <Sidebar variant="floating">
-                    <NavMobile className={"sm:hidden"}/>
+                <Sidebar variant="floating" collapsible="offcanvas" className="md:hidden">
+                    <NavMobile className={"sm:hidden"} navItems={navItems} isLoggedIn={!!user}/>
                     <SidebarRail id="testing"/>
                 </Sidebar>
                 <div className="bg-transparent w-screen">
@@ -54,8 +100,13 @@ export default function SiteLayout({
                                 </SidebarTrigger>
                             </Button>
                             <Logo className="max-sm:hidden ml-3 -mr-[43px]" height={40} width={40}/>
-                            <NavDesktop className="max-sm:hidden items-center h-[var(--header-height)]"/>
+                            <NavDesktop className="max-sm:hidden items-center h-[var(--header-height)]" navItems={navItems}/>
                             <Logo className="sm:hidden" height={40} width={40}/>
+                            <Button variant="ghost" className="max-sm:hidden mr-7 -ml-7" size="icon" asChild>
+                                <Link href={user ? "/admin" : "/admin/login"}>
+                                    {user ? <LayoutDashboard className="h-4 w-4" /> : <LogIn className="h-4 w-4" />}
+                                </Link>
+                            </Button>
                         </div>
                     </div>
                     <ReturnToTopButton/>
@@ -65,6 +116,6 @@ export default function SiteLayout({
                 </div>
             </SidebarProvider>
             <Footer/>
-        </>
+        </BackgroundToggleProvider>
     );
 }

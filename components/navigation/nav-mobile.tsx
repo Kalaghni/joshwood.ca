@@ -1,6 +1,6 @@
 "use client";
 
-import {mainNav} from "@/configs/nav.config";
+import {MainNavItem} from "@/configs/nav.config";
 import Link from "next/link";
 import {ComponentProps, ComponentPropsWithoutRef} from "react";
 import {cn} from "@/lib/utils";
@@ -12,14 +12,19 @@ import {
     SidebarMenuSub, SidebarMenuSubItem, SidebarTrigger, useSidebar
 } from "@/components/ui/sidebar";
 import {Button} from "@/components/ui/button";
-import Logo from "@/components/logo";
+import Logo from "@/components/icons/logo";
 import {usePathname} from "next/navigation";
 import P from "@/components/typography/p";
-import {ChevronRight} from "lucide-react";
+import { ChevronRight, LogIn, LayoutDashboard } from "lucide-react";
 
 const currentYear = new Date().getFullYear();
 
-export default function NavMobile({className, ...props}: ComponentProps<'div'>) {
+export interface NavMobileProps extends ComponentProps<'div'> {
+    navItems: MainNavItem[];
+    isLoggedIn?: boolean;
+}
+
+export default function NavMobile({className, navItems, isLoggedIn = false, ...props}: NavMobileProps) {
 
     const pathname = usePathname();
     const sidebar = useSidebar();
@@ -43,7 +48,7 @@ export default function NavMobile({className, ...props}: ComponentProps<'div'>) 
                 {...props}
                 className={cn(className)}
             >
-                {mainNav.filter(mn => mn.kind !== "link").map((item, idx) => (
+                {navItems.filter(mn => mn.kind !== "link").map((item, idx) => (
                     <SidebarGroup key={idx}>
                             {(item.featured !== undefined) ? (
                                 <SidebarGroupContent>
@@ -79,9 +84,17 @@ export default function NavMobile({className, ...props}: ComponentProps<'div'>) 
                             ) : (
                                 <SidebarGroupContent>
                                     <SidebarMenuItem className="w-full">
-                                        <SidebarMenuButton>
-                                            {item.label}
-                                        </SidebarMenuButton>
+                                            {item.href ?
+                                                <SidebarMenuButton asChild>
+                                                    <Link href={item.href}>
+                                                        {item.label}
+                                                    </Link>
+                                                </SidebarMenuButton>
+                                            :
+                                                <SidebarMenuButton asChild>
+                                                    {item.label}
+                                                </SidebarMenuButton>
+                                            }
                                     </SidebarMenuItem>
                                     {item.items.map((subItem, subIdx) => {
                                         const selected = pathname !== "/" && subItem.href.startsWith(pathname);
@@ -107,7 +120,26 @@ export default function NavMobile({className, ...props}: ComponentProps<'div'>) 
             </SidebarContent>
             <SidebarFooter>
                 <SidebarMenu>
-                {mainNav.filter(mn => mn.kind === "link").map((item, idx) => (
+                    <SidebarMenuItem className="w-full">
+                        <Button variant="outline" className="w-full" asChild>
+                            <Link href={isLoggedIn ? "/admin" : "/admin/login"} onClick={handleClick}>
+                                {isLoggedIn ? (
+                                    <>
+                                        <LayoutDashboard className="mr-2 h-4 w-4" />
+                                        Dashboard
+                                    </>
+                                ) : (
+                                    <>
+                                        <LogIn className="mr-2 h-4 w-4" />
+                                        Login
+                                    </>
+                                )}
+                            </Link>
+                        </Button>
+                    </SidebarMenuItem>
+                </SidebarMenu>
+                <SidebarMenu>
+                {navItems.filter(mn => mn.kind === "link").map((item, idx) => (
                     <SidebarMenuItem className="w-full" key={idx}>
                         <Button variant="link" className="w-full" asChild>
                             <SidebarMenuButton asChild>

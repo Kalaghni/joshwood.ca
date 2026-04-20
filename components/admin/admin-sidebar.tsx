@@ -1,13 +1,15 @@
 "use client";
 
 import {
-  IconDashboard,
-  IconUsers,
-  IconSettings,
-  IconLogout,
-  IconFolder,
-  IconMessage,
-} from "@tabler/icons-react";
+  LayoutDashboard,
+  Users,
+  Settings,
+  LogOut,
+  Folder,
+  MessageSquare,
+  Briefcase,
+  Layers,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -23,15 +25,17 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import Logo from "@/components/logo";
+import Logo from "@/components/icons/logo";
 import { Button } from "@/components/ui/button";
 
 const navItems = [
-  { title: "Dashboard", href: "/admin", icon: IconDashboard },
-  { title: "Projects", href: "/admin/projects", icon: IconFolder },
-  { title: "Messages", href: "/admin/messages", icon: IconMessage },
-  { title: "Users", href: "/admin/users", icon: IconUsers },
-  { title: "Settings", href: "/admin/settings", icon: IconSettings },
+  { title: "Dashboard", href: "/admin", icon: LayoutDashboard },
+  { title: "Projects", href: "/admin/projects", icon: Folder },
+  { title: "Experience", href: "/admin/experiences", icon: Briefcase },
+  { title: "Technologies", href: "/admin/technologies", icon: Layers },
+  { title: "Messages", href: "/admin/messages", icon: MessageSquare },
+  { title: "Users", href: "/admin/users", icon: Users },
+  { title: "Settings", href: "/admin/settings", icon: Settings },
 ];
 
 export function AdminSidebar() {
@@ -45,48 +49,48 @@ export function AdminSidebar() {
   }
 
   return (
-    <Sidebar>
-      <SidebarHeader className="border-b border-border/50 pb-4">
-        <Link href="/admin" className="flex items-center gap-2 px-2">
-          <Logo height={32} width={32} />
-          <span className="font-semibold">Admin</span>
-        </Link>
+    <Sidebar collapsible="icon">
+      <SidebarHeader className="border-b border-border/50 h-16 justify-center items-center">
+          <Logo width={40} height={40}/>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Navigation</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {navItems.map((item) => (
-                <SidebarMenuItem key={item.href}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={pathname === item.href}
-                  >
-                    <Link
-                      href={item.href}
-                      className={cn(
-                        "flex items-center gap-2",
-                        pathname === item.href && "font-medium"
-                      )}
-                    >
-                      <item.icon className="h-4 w-4" />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {navItems.map((item) => {
+                const isActive =
+                  item.href === "/admin"
+                    ? pathname === "/admin"
+                    : pathname.startsWith(item.href);
+                return (
+                  <SidebarMenuItem key={item.href}>
+                    <SidebarMenuButton asChild isActive={isActive}>
+                      <Link
+                        href={item.href}
+                        className={cn(
+                          "flex items-center gap-2",
+                          isActive && "font-medium"
+                        )}
+                      >
+                        <item.icon className="h-4 w-4" />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="border-t border-border/50 pt-4">
+      <SidebarFooter className="border-t border-border/50">
         <Button
           variant="ghost"
-          className="w-full justify-start gap-2"
+          className="w-full justify-start gap-2 hover:text-destructive"
           onClick={handleLogout}
         >
-          <IconLogout className="h-4 w-4" />
+          <LogOut className="h-4 w-4" />
           Logout
         </Button>
       </SidebarFooter>

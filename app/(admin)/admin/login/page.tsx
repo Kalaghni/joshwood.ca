@@ -1,5 +1,5 @@
-import { LoginForm } from "@/components/admin/login-form";
-import Logo from "@/components/logo";
+import { LoginForm } from "@/app/(admin)/admin/login/login-form";
+import Logo from "@/components/icons/logo";
 
 export default function LoginPage() {
   return (
