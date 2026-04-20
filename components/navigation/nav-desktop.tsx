@@ -6,14 +6,19 @@ import {
     NavigationMenuLink,
     NavigationMenuList, NavigationMenuTrigger
 } from "@/components/ui/navigation-menu";
-import {mainNav, ProjectProps} from "@/configs/nav.config";
+import {MainNavItem, ProjectProps} from "@/configs/nav.config";
 import Link from "next/link";
 import {ComponentProps, ComponentPropsWithoutRef} from "react";
 import {cn} from "@/lib/utils";
 import {usePathname} from "next/navigation";
 import {Button} from "@/components/ui/button";
+import { LogIn } from "lucide-react";
 
-export default function NavDesktop({className, ...props}: ComponentProps<'ul'>) {
+export interface NavDesktopProps extends ComponentProps<'ul'> {
+    navItems: MainNavItem[];
+}
+
+export default function NavDesktop({className, navItems, ...props}: NavDesktopProps) {
 
     const pathname = usePathname();
 
@@ -22,13 +27,13 @@ export default function NavDesktop({className, ...props}: ComponentProps<'ul'>) 
             <NavigationMenuList
                 {...props}
                 className={cn(className)}>
-                {mainNav.map((navItem, nix) => {
+                {navItems.map((navItem, nix) => {
                     const selected = navItem.href === pathname
 
                     return (
                         <NavigationMenuItem key={nix}>
                             <NavigationMenuTrigger asChild>
-                                <Button variant={selected ? "link" : "secondary"} data-hover={selected} className={cn("shadow-none", (selected ? "focus:text-primary active:bg-transparent focus:bg-transparent": ""))} asChild>
+                                <Button variant={selected ? "link" : "secondary"} data-hover={selected} className={cn("shadow-none", (selected ? "focus:text-primary active:bg-transparent focus:bg-transparent": "text-accent-foreground"))} asChild>
                                     {navItem.href ?
                                         <Link href={navItem.href}>
                                             {navItem.label}
@@ -127,7 +132,7 @@ function ListItem({
             <NavigationMenuLink asChild>
                 <Link
                     href={href}
-                    className="block rounded-lg p-3 transition-all duration-200 hover:bg-white/10 hover:shadow-md hover:scale-[1.02]"
+                    className="block rounded-lg p-3 transition-all duration-200 dark:hover:bg-white/10 hover:shadow-md hover:scale-[1.02]"
                 >
                     <div className="text-sm leading-none font-medium">{title}</div>
                     <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">

@@ -4,7 +4,7 @@ import {cn} from "@/lib/utils";
 export default function P({className, children}: ComponentProps<"p">) {
     return (
         <p
-            className={cn("font-sans", className)}
+            className={cn("text-foreground font-sans", className)}
         >
             {children}
         </p>

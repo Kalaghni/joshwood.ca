@@ -25,7 +25,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import Link from "next/link";
-import {NormalizedHref} from "next/dist/client/components/segment-cache-impl/cache-key";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
@@ -209,7 +208,7 @@ function Sidebar({
 
   return (
     <div
-      className="group peer text-sidebar-foreground hidden"
+      className={cn("group peer text-sidebar-foreground hidden md:block", className)}
       data-state={state}
       data-collapsible={state === "collapsed" ? collapsible : ""}
       data-variant={variant}

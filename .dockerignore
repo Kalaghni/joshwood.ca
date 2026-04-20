@@ -1,0 +1,9 @@
+node_modules
+.idea
+.claude
+.archive
+.next
+CLAUDE.md
+.gitattributes
+.gitignore
+nul

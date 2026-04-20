@@ -22,7 +22,10 @@
 
 # misc
 .DS_Store
+
+# SSL
 *.pem
+*.key
 
 # debug
 npm-debug.log*
@@ -43,3 +46,5 @@ next-env.d.ts
 .idea
 .mcp.json
 priv.key
+nul
+.idea/runConfigurations/BUILD___DEPLOY.xml

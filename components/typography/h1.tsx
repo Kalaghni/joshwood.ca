@@ -5,7 +5,7 @@ export default function H1({className, children, ...props}:
                            ComponentProps<"h1">
 ) {
     return (
-        <h1 className={cn("scroll-m-20 text-9xl font-heading tracking-tight text-balance", className)}
+        <h1 className={cn("text-foreground scroll-m-20 text-9xl font-heading tracking-tight text-balance", className)}
             {...props}
         >
             {children}

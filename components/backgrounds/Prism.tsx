@@ -1,7 +1,6 @@
 "use client";
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Renderer, Triangle, Program, Mesh } from 'ogl';
-import {useSidebar} from "@/components/ui/sidebar";
 
 type PrismProps = {
   height?: number;
@@ -19,7 +18,64 @@ type PrismProps = {
   bloom?: number;
   suspendWhenOffscreen?: boolean;
   timeScale?: number;
+  minFps?: number;
+  testFrames?: number;
 };
+
+function detectGpuCapability(): Promise<boolean> {
+  return new Promise((resolve) => {
+    try {
+      const canvas = document.createElement('canvas');
+      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      if (!gl) {
+        resolve(false);
+        return;
+      }
+
+      const debugInfo = (gl as WebGLRenderingContext).getExtension('WEBGL_debug_renderer_info');
+      if (debugInfo) {
+        const renderer = (gl as WebGLRenderingContext).getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+        const lowEndIndicators = ['swiftshader', 'llvmpipe', 'software', 'microsoft basic'];
+        const isLowEnd = lowEndIndicators.some(indicator =>
+          renderer.toLowerCase().includes(indicator)
+        );
+        if (isLowEnd) {
+          resolve(false);
+          return;
+        }
+      }
+
+      resolve(true);
+    } catch {
+      resolve(false);
+    }
+  });
+}
+
+function measureFps(frames: number, minFps: number): Promise<boolean> {
+  return new Promise((resolve) => {
+    const frameTimes: number[] = [];
+    let lastTime = performance.now();
+    let frameCount = 0;
+
+    const measure = () => {
+      const now = performance.now();
+      frameTimes.push(now - lastTime);
+      lastTime = now;
+      frameCount++;
+
+      if (frameCount >= frames) {
+        const avgFrameTime = frameTimes.reduce((a, b) => a + b, 0) / frameTimes.length;
+        const avgFps = 1000 / avgFrameTime;
+        resolve(avgFps >= minFps);
+      } else {
+        requestAnimationFrame(measure);
+      }
+    };
+
+    requestAnimationFrame(measure);
+  });
+}
 
 const Prism: React.FC<PrismProps> = ({
   height = 3.5,
@@ -36,11 +92,38 @@ const Prism: React.FC<PrismProps> = ({
   inertia = 0.05,
   bloom = 1,
   suspendWhenOffscreen = false,
-  timeScale = 0.5
+  timeScale = 0.5,
+  minFps = 30,
+  testFrames = 10
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
+    let cancelled = false;
+
+    async function checkCapability() {
+      const gpuOk = await detectGpuCapability();
+      if (!gpuOk || cancelled) {
+        return;
+      }
+
+      const fpsOk = await measureFps(testFrames, minFps);
+      if (!cancelled && fpsOk) {
+        setIsReady(true);
+      }
+    }
+
+    checkCapability();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [minFps, testFrames]);
+
+  useEffect(() => {
+    if (!isReady) return;
+
     const container = containerRef.current;
     if (!container) return;
 
@@ -435,6 +518,7 @@ const Prism: React.FC<PrismProps> = ({
       if (gl.canvas.parentElement === container) container.removeChild(gl.canvas);
     };
   }, [
+    isReady,
     height,
     baseWidth,
     animationType,
