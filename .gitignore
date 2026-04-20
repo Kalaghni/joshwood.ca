@@ -45,3 +45,6 @@ next-env.d.ts
 
 .idea
 .claude
+.mcp.json
+nul
+.idea/runConfigurations/BUILD___DEPLOY.xml

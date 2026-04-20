@@ -9,6 +9,7 @@ import {
   MessageSquare,
   Briefcase,
   Layers,
+  BookOpen,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -31,6 +32,7 @@ import { Button } from "@/components/ui/button";
 const navItems = [
   { title: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { title: "Projects", href: "/admin/projects", icon: Folder },
+  { title: "Blogs", href: "/admin/blogs", icon: BookOpen },
   { title: "Experience", href: "/admin/experiences", icon: Briefcase },
   { title: "Technologies", href: "/admin/technologies", icon: Layers },
   { title: "Messages", href: "/admin/messages", icon: MessageSquare },

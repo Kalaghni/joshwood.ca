@@ -66,6 +66,12 @@ export function buildMainNav(projects: ProjectProps[]): MainNavItem[] {
             items: projects,
         },
         {
+            id: "blog",
+            label: "Blog",
+            kind: "link",
+            href: "/blog",
+        },
+        {
             id: "twc",
             label: "The Watering Can",
             kind: "link",
